@@ -1,0 +1,151 @@
+---
+title: "bsnR Workflow"
+author: "Matthew Ploenzke"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{bsnR Workflow}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+This vignette is intended to showcase the typical workflow for creating and manipulating the objects created in the bsnR package.
+
+## Dataset 
+
+The pedigrees dataset included in the package contains records for 100,00 simulated family pedigrees. Each pedigree is simulated by first spawning the grandparent generation. ... Include more stuff from the paper here on the simulation strategy.
+
+```{r dataset}
+rm(list=ls(all=TRUE))
+library(bsnR)
+data("pedigrees")
+self <- pedigrees[pedigrees$ID==1,]
+```
+## Setting key variables
+
+Define the key variables below for the sorted neighbors. These should correspond to columns in the dataset under consideration for which we eventually wish to include in the duplicate pair match scoring.
+```{r keyVars}
+# variables to be used in generating the sort keys
+binary.v <- c("Gender","AffectedBreast","AffectedOvary","AffectedColon","AffectedEndometrium","AffectedPancreas","AffectedSkin","Twins","BRCA1","BRCA2","MLH1","MSH2","MSH6","P16")
+cont.v <- c("AgeBreast","AgeOvary","AgeColon","AgeEndometrium","AgePancreas","AgeSkin")
+vars <- c(binary.v,cont.v, "senderIP")
+```
+## Initialize a Neighbors object
+
+bsnR is heavily dependent upon various S3 classes, the first of which is the Neighbors class. Below we initialize an object of this class by providing the raw data, a character input defining which column to be used as the ID variable, and the previously defined key variables.
+```{r Neighbors}
+# generate object of Neighbors class
+neighbsObj <- Neighbors(self, ID="requestId",keyVars=vars)
+summary(neighbsObj)
+```
+
+## Perform BSN
+We may now perform an iteration of the blocked sorted neighbors algorithm. The input must be a Neighbors object created in the previous step. The algorithm partitions the IDs based on the blocking variable provided and then repeats sorted neighbors iterations, each time collecting those neighbors within the specified sorted neighbors window. Please see __ for more information. This creates a Blocks object, which is essentially a Neighbors object which now contains information about the BSN call.
+
+```{r Blocks}
+# perform an iteration of BSN algorithm blocking on IP address
+blocksObj <- blockedSN(neighbsObj, blockVar='senderIP', repSN=3, windowSN=5)
+summary(blocksObj)
+```
+
+It is simple to perform another call of the BSN algorithm and append the new neighbors.
+
+```{r reBlock}
+# and perform another
+blocksObj <- blockedSN(blocksObj, blockVar='BRCA1', repSN=2, windowSN=10)
+summary(blocksObj)
+```
+
+We may also see the blocking variables and sort keys used on the various calls.
+
+```{r sortKeys}
+print(blocksObj$keysUsed)
+```
+
+## Generating background
+Background neighbors are potential duplicate pairs found by randomly choosing two neighbors from the list of all IDs. In theory, the BSN algorithm should outperform these background pairs due to the nature of the algorithm. Here we find an equal number of background neighbors as we currently have from the previous BSN calls.
+
+```{r sampleBG}
+# randomly generate potential pairs to compare to
+## num>1 -> count, num<=1 -> proportion of current neighbors found via BSN
+blocksObj <- sampleBackground(blocksObj, num=1)
+```
+
+## Scoring neighbors
+We now promote the Blocks object to a Scores object by scoring each pair of records. That is to say each pair of neighbors found previously are scored based on the key variables and their associated weights. The scoring is based on simple matching: string variables and binary variables are scored 0/1 for non-match/match and continuous (numeric) variables are scored based on a simple distance with an maximum value of 1 for match and 1/(abs(difference)+1) for non-matches.
+
+```{r Scores}
+# get match score (not incorporating pedigree structure)
+scoresObj <- scoreNeighbors(blocksObj)
+summary(scoresObj)
+```
+
+Distributions may also be visualized by calling plot on the Scores object.
+
+```{r plotScores}
+plot(scoresObj, type="density")
+plot(scoresObj, type="box")
+```
+
+## Greedy pedigree scoring
+Researchers may also wish to leverage the known pedigree structure inherent in the data. To do so, we instead score the Blocks object by calling scoreFamilies and specifying the full dataset and the necessary ID variables. Here ID refers to the column in the datasets for an individuals ID (e.g. all Selfs are ID==1). MotherID and FatherID point to the mothers' and fathers' own ID values, respectively. Note the scoring takes much longer as each member type of the candidate pedigree is greedily matched against member types in the comparison pedigree to attempt to maximize the match score and leverage the known parent-child relationships. In other words, all siblings of an individual (ID==1) in pedigree 1 are compared to all siblings of the individual in pedigree 2. 
+
+```{r GPM, eval=FALSE}
+# or get match score incorporating greedy pedigree matching
+famscoresObj <- scoreFamilies(blocksObj, pedigrees, "ID", "MotherID","FatherID")
+summary(famscoresObj)
+plot(famscoresObj, type="density")
+plot(famscoresObj, type="box")
+```
+
+## Deduplication
+We are now ready to define a threshold and see how the BSN algorithm has performed. The threshold input is a proportion such that only those candidate duplicate pedigrees above the percentile are defined as true duplicate pairs. In the deDuplicate call below pedigrees will be assigned to duplicate entities; these entities are comprised of all families passing the threshold and completing the associative set (e.g. if family A and family B are candidate pairs passing the threshold, as are families A and C, then the duplicate entity consists of families A, B, C). The priority input defines how to sort these families within the entity. The function call returns a Duplicates object.
+
+```{r Duplicates}
+# deduplicate on arbitrary threshold
+orderon <- list(VAR="AgeBreast", DESC=TRUE)
+duplicatesObj <- deDuplicate(scoresObj, thresh=.999, priority=orderon)
+summary(duplicatesObj)
+```
+
+We may again plot these to see how the scores above the threshold defined as duplicate pairs compare to those below.
+
+```{r plotDuplicates}
+plot(duplicatesObj, type="density")
+plot(duplicatesObj, type="box")
+```
+
+## Output formatting
+The Duplicates object from above is not so useful for data analysis. Thus it is now time to transform it back to a useable list reflecting the analysis and duplicate ordering defined previously. Note if the user wishes to remove any pedigrees from an duplicate entity, they may do so by simply removing that row from the entity held in the Duplicates dupsList slot.
+
+```{r CleanIt}
+# format back to a list
+cleanList <- reformatDuplicates(duplicatesObj)
+```
+
+## The big reveal
+Should labels exist we may now check our accuracy. 
+
+```{r RevealIt}
+# reveal accuracy if labels exist
+selfs.deduped <- revealTruth(cleanList, labels="FamilyID", duplabels="requestId")
+```
+
+## Simulating new pedigrees
+
+You may also simulate your own duplicated pedigrees and repeat the procedure! See sample code below for formatting.
+
+```{r, eval=FALSE}
+
+# create a simulation dataset with duplicates and miscodings
+library(BayesMendel)
+source('/Users/Ploenzke/Documents/PedigreeDeduplication/Archive/SimulateFamily.R')
+pedigrees <- makeSimDataset(nFams=100,pDup=.02,singleP=.001,stdP=.95,
+                     parents=1,gparents=.99,sibs=.75,ants=.65,cuz=.25,errRt=3,
+                     numUnique=10,iperror=FALSE,probip=0,birthrt=c(2,2))
+row.names(pedigrees) <- NULL
+pedigrees <- pedigrees[,1:(ncol(pedigrees)-2)]
+pedigrees <- pedigrees[,-18]
+pedigrees <- pedigrees[,-ncol(pedigrees)]
+#save(pedigrees, file="/Users/Ploenzke/Documents/PedigreeDeduplication/bsnR/data/pedigrees.RData")
+```
