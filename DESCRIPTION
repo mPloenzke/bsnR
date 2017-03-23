@@ -16,3 +16,5 @@ Suggests: knitr,
     sm,
     caret
 VignetteBuilder: knitr
+URL: http://github.com/mPloenzke/bsnR
+BugReports: http://github.com/mPloenzke/bsnR/issues
