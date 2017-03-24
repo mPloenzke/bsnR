@@ -53,8 +53,19 @@ blockedSN.Neighbors <- function(object, blockVar, repSN, windowSN, keyLength) {
     })
     names(subdat) <- iter
     rez <- lapply(iter, function(it) {
+        #print(it)
+        if (nrow(subdat[[it]])==1) {return(NULL)}
+        if (nrow(subdat[[it]])==2) {
+            nei <- cbind(subdat[[it]][1,object[["ID"]]],subdat[[it]][2,object[["ID"]]])
+            colnames(nei) <- c("sorted.ids", "")
+            return(nei)
+        }
         nei <- lapply(1:repSN, function(sn) {
-            sortedNeighbors(subdat[[it]], keys[[sn]], windowSN = windowSN, ID = object[["ID"]])
+            if (nrow(subdat[[it]]) > windowSN) {
+                sortedNeighbors(subdat[[it]], keys[[sn]], windowSN = windowSN, ID = object[["ID"]])
+            } else {
+                sortedNeighbors(subdat[[it]], keys[[sn]], windowSN = nrow(subdat[[it]])-1, ID = object[["ID"]])
+            }
         })
         do.call(rbind, nei)
     })
@@ -97,8 +108,18 @@ blockedSN.Blocks <- function(object, blockVar, repSN, windowSN, keyLength) {
     })
     names(subdat) <- iter
     rez <- lapply(iter, function(it) {
+        if (nrow(subdat[[it]])==1) {return(NULL)}
+        if (nrow(subdat[[it]])==2) {
+            nei <- cbind(subdat[[it]][1,object[["ID"]]],subdat[[it]][2,object[["ID"]]])
+            colnames(nei) <- c("sorted.ids", "")
+            return(nei)
+        }
         nei <- lapply(1:repSN, function(sn) {
-            sortedNeighbors(subdat[[it]], keys[[sn]], windowSN = windowSN, ID = object[["ID"]])
+            if (nrow(subdat[[it]]) > windowSN) {
+                sortedNeighbors(subdat[[it]], keys[[sn]], windowSN = windowSN, ID = object[["ID"]])
+            } else {
+                sortedNeighbors(subdat[[it]], keys[[sn]], windowSN = nrow(subdat[[it]])-1, ID = object[["ID"]])
+            }
         })
         do.call(rbind, nei)
     })
@@ -141,8 +162,18 @@ blockedSN.Scores <- function(object, blockVar, repSN, windowSN, keyLength) {
     })
     names(subdat) <- iter
     rez <- lapply(iter, function(it) {
+        if (nrow(subdat[[it]])==1) {return(NULL)}
+        if (nrow(subdat[[it]])==2) {
+            nei <- cbind(subdat[[it]][1,object[["ID"]]],subdat[[it]][2,object[["ID"]]])
+            colnames(nei) <- c("sorted.ids", "")
+            return(nei)
+        }
         nei <- lapply(1:repSN, function(sn) {
-            sortedNeighbors(subdat[[it]], keys[[sn]], windowSN = windowSN, ID = object[["ID"]])
+            if (nrow(subdat[[it]]) > windowSN) {
+                sortedNeighbors(subdat[[it]], keys[[sn]], windowSN = windowSN, ID = object[["ID"]])
+            } else {
+                sortedNeighbors(subdat[[it]], keys[[sn]], windowSN = nrow(subdat[[it]])-1, ID = object[["ID"]])
+            }
         })
         do.call(rbind, nei)
     })
