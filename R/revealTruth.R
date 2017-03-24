@@ -26,7 +26,7 @@ revealTruth.list <- function(object, labels, duplabels) {
         labels <- object$rawData[, labels]
     }
     if (length(labels) != nrow(object$rawData)) {
-        error("Labels do not fit.")
+        print("Labels do not fit.")
         return(NULL)
     }
     data <- object$rawData

@@ -12,7 +12,7 @@ sampleBackground <- function(object, num) {
 
 #' @rdname sampleBackground
 #' @export 
-sampleBackground.default <- function(object, blockVar, repSN, windowSN, keyLength) {
+sampleBackground.default <- function(object, num) {
     print("Sampling allowable on Neighbors, Blocks, and Scores objects only.")
     return(NULL)
 }

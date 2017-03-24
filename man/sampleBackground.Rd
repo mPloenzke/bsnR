@@ -10,7 +10,7 @@
 \usage{
 sampleBackground(object, num)
 
-\method{sampleBackground}{default}(object, blockVar, repSN, windowSN, keyLength)
+\method{sampleBackground}{default}(object, num)
 
 \method{sampleBackground}{Neighbors}(object, num)
 

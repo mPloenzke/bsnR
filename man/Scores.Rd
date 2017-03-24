@@ -16,5 +16,5 @@ An object of class \code{\link{Scores}}.
 }
 \description{
 Stores the scored neighbors and parameters from calling 
-\code{\link{calculateScore}}.
+\code{\link{scoreNeighbors}}.
 }

@@ -1,7 +1,7 @@
 #' Scores object.
 #'
 #' Stores the scored neighbors and parameters from calling 
-#' \code{\link{calculateScore}}.
+#' \code{\link{scoreNeighbors}}.
 #'
 #' @param BlocksObj \code{\link{Blocks}} object to score.
 #' @param Scores Numeric vector of match scores.

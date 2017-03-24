@@ -31,7 +31,7 @@ blockedSN.Neighbors <- function(object, blockVar, repSN, windowSN, keyLength) {
     keyVars <- keyVars[keyVars != blockVar]
     # generate pseudo random key lengths if none provided
     if (missing(keyLength)) {
-        runif(1)
+        stats::runif(1)
         keyLength <- abs(.Random.seed[1:repSN])%%10
         idx <- keyLength > length(keyVars)
         keyLength[idx] <- length(keyVars)
@@ -75,7 +75,7 @@ blockedSN.Blocks <- function(object, blockVar, repSN, windowSN, keyLength) {
     keyVars <- keyVars[keyVars != blockVar]
     # generate pseudo random key lengths if none provided
     if (missing(keyLength)) {
-        runif(1)
+        stats::runif(1)
         keyLength <- abs(.Random.seed[1:repSN])%%10
         idx <- keyLength > length(keyVars)
         keyLength[idx] <- length(keyVars)
@@ -119,7 +119,7 @@ blockedSN.Scores <- function(object, blockVar, repSN, windowSN, keyLength) {
     keyVars <- keyVars[keyVars != blockVar]
     # generate pseudo random key lengths if none provided
     if (missing(keyLength)) {
-        runif(1)
+        stats::runif(1)
         keyLength <- abs(.Random.seed[1:repSN])%%10
         idx <- keyLength > length(keyVars)
         keyLength[idx] <- length(keyVars)

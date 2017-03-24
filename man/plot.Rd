@@ -5,12 +5,12 @@
 \alias{plot.Duplicates}
 \title{Plot Neighbors object generic.}
 \usage{
-\method{plot}{Scores}(object, type, ...)
+\method{plot}{Scores}(x, type, ...)
 
-\method{plot}{Duplicates}(object, type, ...)
+\method{plot}{Duplicates}(x, type, ...)
 }
 \arguments{
-\item{object}{\code{\link{Neighbors}} oject to be summarized.}
+\item{x}{code{\link{Neighbors}} or \code{\link{Neighbors}} oject to be summarized.}
 
 \item{type}{Char, How to display the plot (eg. 'box', 'density')}
 
