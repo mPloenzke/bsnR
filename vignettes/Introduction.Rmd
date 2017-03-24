@@ -44,7 +44,7 @@ We may now perform an iteration of the blocked sorted neighbors algorithm. The i
 
 ```{r Blocks}
 # perform an iteration of BSN algorithm blocking on IP address
-blocksObj <- blockedSN(neighbsObj, blockVar='senderIP', repSN=3, windowSN=5)
+blocksObj <- blockedSN(neighbsObj, blockVar='senderIP', repSN=1, windowSN=3)
 summary(blocksObj)
 ```
 

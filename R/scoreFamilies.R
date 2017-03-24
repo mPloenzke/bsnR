@@ -95,7 +95,10 @@ scoreFamilies.Blocks <- function(object, familyDat, selfID, motherID, fatherID) 
         }, silent = TRUE)
         ifelse(class(tsc) == "try-error", 0, tsc)
     })
-    scoreVec <- selfScore + motherScore + fatherScore + ffatherScore + fmotherScore + mfatherScore + mmotherScore + allScore
+    scoreVec <- as.numeric(selfScore) + as.numeric(motherScore) + 
+                as.numeric(fatherScore) + as.numeric(ffatherScore) + 
+                as.numeric(fmotherScore) + as.numeric(mfatherScore) + 
+                as.numeric(mmotherScore) + as.numeric(allScore)
     object <- set(object, "scoreVec", scoreVec)
     return(object)
 }
