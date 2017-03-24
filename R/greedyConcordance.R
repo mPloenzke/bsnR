@@ -14,6 +14,11 @@ greedyConcordance <- function(fam1, fam2, keyVars) {
     numericWts <- as.numeric(keyVars[keyVars[, "keyType"] == "numeric", "keyWt"])
     matchVars <- keyVars[keyVars[, "keyType"] != "numeric", "keyVars"]
     matchWts <- as.numeric(keyVars[keyVars[, "keyType"] != "numeric", "keyWt"])
+    if (nrow(fam1)>nrow(fam2)) {
+        fam0 <- fam1
+        fam1 <- fam2
+        fam2 <- fam1
+    }
     numericData1 <- fam1[, numericVars]
     numericData2 <- fam2[, numericVars]
     matchData1 <- fam1[, matchVars]
