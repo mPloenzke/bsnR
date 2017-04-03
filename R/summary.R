@@ -51,10 +51,10 @@ summary.Duplicates <- function(object, ...) {
     ans[["Class"]] <- "Object of class Duplicates"
     ans[["Duplicates ordered on: "]]
     if (object$details[[4]]) {
-        ans[["Duplicates thresholded at: "]] <- paste0(object$details[[1]], " (", object$details[[2]], ") in descending order on ", 
+        ans[["Duplicates thresholded at: "]] <- paste0(object$details[[1]], " percentile (", object$details[[2]], ") in descending order on ", 
             object$details[[3]])
     } else {
-        ans[["Duplicates thresholded at: "]] <- paste0(object$details[[1]], " (", object$details[[2]], ") in ascending order on ", 
+        ans[["Duplicates thresholded at: "]] <- paste0(object$details[[1]], " percentile (", object$details[[2]], ") in ascending order on ", 
             object$details[[3]])
         
     }

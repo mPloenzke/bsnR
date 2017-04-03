@@ -33,6 +33,9 @@ deDuplicate.Scores <- function(object, thresh, priority) {
     threshold <- as.numeric(thresh)
     thresh <- stats::quantile(as.numeric(scoresMat[, "matchScore"]), probs = as.numeric(thresh), na.rm = TRUE)
     dups <- which(scoresMat[, "matchScore"] > thresh)
+    if (length(dups)==0) {
+        print('0 duplicates found. Try lowering the threshold.')
+    }
     dupsIDs <- scoresMat[dups, ]
     hasDup <- unique(c(dupsIDs[, 1], dupsIDs[, 2]))
     oldIDs <- unique(object[["rawData"]][, object[["ID"]]])
