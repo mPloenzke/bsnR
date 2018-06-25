@@ -212,7 +212,7 @@ selfs.deduped <- revealTruth(duplicatesObj, truelabels="FamilyID", duplabels="re
 
 ## Simulating new pedigrees
 
-You may also simulate your own duplicated pedigrees and repeat the procedure! See sample code below for formatting. The BayesMendel package is a dependency.
+You may also simulate your own duplicated pedigrees and repeat the procedure! See sample code below for formatting. The BayesMendel package is a dependency for this and you will need to source the script from the R folder.
 
 ```{r, eval=FALSE}
 # create a simulation dataset with duplicates and miscodings
