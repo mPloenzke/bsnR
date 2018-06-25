@@ -19,7 +19,7 @@ deDuplicate(object, thresh, priority)
 
 \item{priority}{A list of structure (Var= 'Varx', DESC=TRUE) with 'Varx'
 being either a numeric or character value corresponding to a column in rawData.
-This parameter determines how to sort the duplicates. 
+This parameter determines how to sort the duplicates.
 DESC is a logical for this ordering (descending).}
 }
 \value{

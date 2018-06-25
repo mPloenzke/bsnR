@@ -6,7 +6,7 @@
 #' @param type Char, How to display the plot (eg. 'box', 'density')
 #' @param ... other arguments to be passed.
 #' @rdname plot
-#' @export 
+#' @export
 plot.Scores <- function(x, type, ...) {
     scores <- x[["Neighbors"]][, "matchScore"]
     bg <- x[["Neighbors"]][, "background"]
@@ -23,7 +23,7 @@ plot.Scores <- function(x, type, ...) {
         }
     } else if (type == "box") {
         if (length(unique(bg)) > 1) {
-            graphics::boxplot(as.numeric(scores) ~ as.factor(bg), xlab = "Discovery Method", ylab = "Match Score", main = "Match Score by Discovery Method", 
+            graphics::boxplot(as.numeric(scores) ~ as.factor(bg), xlab = "Discovery Method", ylab = "Match Score", main = "Match Score by Discovery Method",
                 ...)
             graphics::abline(h = x[["details"]][[1]], col = "red")
         } else {
@@ -33,11 +33,11 @@ plot.Scores <- function(x, type, ...) {
     } else {
         print("Please provide a valid type argmument.")
     }
-    
+
 }
 
 #' @rdname plot
-#' @export 
+#' @export
 plot.Duplicates <- function(x, type, ...) {
     scores <- x[["Neighbors"]][, "matchScore"]
     thresh <- x[["details"]][[2]]
@@ -48,9 +48,16 @@ plot.Duplicates <- function(x, type, ...) {
         graphics::title(main = "Match Score Density by Duplicate Pair Status")
         graphics::legend("right", c("Not Dup", "Dup"), fill = 2:3)
     } else if (type == "box") {
-        graphics::boxplot(as.numeric(scores) ~ as.factor(bg), xlab = "Duplicate Pair", ylab = "Match Score", main = "Match Score by Duplicate Pair Status", 
+        graphics::boxplot(as.numeric(scores) ~ as.factor(bg), xlab = "Duplicate Pair", ylab = "Match Score", main = "Match Score by Duplicate Pair Status",
             ...)
         graphics::abline(h = x[["details"]][[2]], col = "red")
+    } else if (type == "family counts") {
+      sizes <- matrix(data=NA,nrow=length(x$dupsList),ncol=1)
+      for (i in 1:length(x$dupsList)) {
+        sizes[i,1] <- nrow(x$dupsList[[i]])
+      }
+      graphics::hist(sizes, breaks=2:max(sizes), xlab = "Number of Occurrences", main = "Family Duplicate Counts",
+                        ...)
     } else {
         print("Please provide a valid type argmument.")
     }

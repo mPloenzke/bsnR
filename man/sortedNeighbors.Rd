@@ -19,6 +19,6 @@ sortedNeighbors(dat, key, windowSN, ID)
 A data frame with 2 columns and n rows, each row containing neighbor pairs.
 }
 \description{
-\code{sortedNeighbors} sorts the input data frame on the specified sort key 
+\code{sortedNeighbors} sorts the input data frame on the specified sort key
 and returns all neighbors within a specified window.
 }

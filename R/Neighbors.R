@@ -5,16 +5,16 @@
 #' @param dat Input data matrix used in the BSN algorithm.
 #' @param ID Character or numeric value. Identifing column in dat.
 #' This is the ID variable for which \code{Neighbors} will reference.
-#' @param keyVars Character or numeric vector. Which variables to 
+#' @param keyVars Character or numeric vector. Which variables to
 #' include when generating sort keys?
-#' @return An object of class \code{\link{Neighbors}}. 
+#' @return An object of class \code{\link{Neighbors}}.
 #'
 #' @export
 Neighbors <- function(dat, ID, keyVars) {
     if (missing(keyVars)) {
         keyVars <- colnames(dat)
     }
-    keyVars <- keyVars[keyVars != ID]
+  keyVars <- keyVars[keyVars != ID]
     keyMat <- matrix(data = NA, nrow = length(keyVars), ncol = 3)
     colnames(keyMat) <- c("keyVars", "keyType", "keyWt")
     keyMat[, "keyVars"] <- keyVars

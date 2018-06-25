@@ -6,7 +6,7 @@
 #' consistent between the two records plus a similarity measure for the continuous variables.
 #'
 #' @param object object containing pre-computed Neighbors from the BSN algorithm.
-#' @return An object of class \code{\link{Scores}} containing the scored neighbor pairs. 
+#' @return An object of class \code{\link{Scores}} containing the scored neighbor pairs.
 #'
 #' @export
 scoreNeighbors <- function(object) {
@@ -14,7 +14,7 @@ scoreNeighbors <- function(object) {
 }
 
 #' @rdname scoreNeighbors
-#' @export 
+#' @export
 scoreNeighbors.default <- function(object) {
     print("Scoring allowable on Blocks and Scores objects only.")
     print("Please first block the Neighbors object.")
@@ -22,7 +22,7 @@ scoreNeighbors.default <- function(object) {
 }
 
 #' @rdname scoreNeighbors
-#' @export 
+#' @export
 scoreNeighbors.Blocks <- function(object) {
     numericVars <- object$keyVars[object$keyVars[, "keyType"] == "numeric", "keyVars"]
     numericWts <- as.numeric(object$keyVars[object$keyVars[, "keyType"] == "numeric", "keyWt"])
@@ -53,7 +53,7 @@ scoreNeighbors.Blocks <- function(object) {
 }
 
 #' @rdname scoreNeighbors
-#' @export 
+#' @export
 scoreNeighbors.Scores <- function(object) {
     numericVars <- object$keyVars[object$keyVars[, "keyType"] == "numeric", "keyVars"]
     numericWts <- as.numeric(object$keyVars[object$keyVars[, "keyType"] == "numeric", "keyWt"])

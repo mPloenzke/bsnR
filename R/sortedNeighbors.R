@@ -1,6 +1,6 @@
 #' Perform a single iteration of sorted neighbors.
 #'
-#' \code{sortedNeighbors} sorts the input data frame on the specified sort key 
+#' \code{sortedNeighbors} sorts the input data frame on the specified sort key
 #' and returns all neighbors within a specified window.
 #'
 #' @param dat Data frame. Data used for sorting and discovering neighbors.
@@ -11,11 +11,12 @@
 #'
 #' @export
 sortedNeighbors <- function(dat, key, windowSN, ID) {
+    save.image('temp.Rda')
     str <- paste0("dat[order(", paste(paste0("dat$", key), collapse = ","), "),]")
     tempdat <- eval(parse(text = str))
     sorted.ids <- tempdat[, ID]
     str <- "cbind(sorted.ids"
-    if (windowSN > 1) {
+    if (windowSN >= 1) {
         for (i in 1:(windowSN)) {
             str <- paste0(str, ",c(tail(sorted.ids, -", i, "), rep(NA,", i, "))")
         }

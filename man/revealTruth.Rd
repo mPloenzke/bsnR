@@ -3,22 +3,22 @@
 \name{revealTruth}
 \alias{revealTruth}
 \alias{revealTruth.default}
-\alias{revealTruth.list}
+\alias{revealTruth.Duplicates}
 \title{Reveal scored neighbors matrix.}
 \usage{
-revealTruth(object, labels, duplabels)
+revealTruth(object, truelabels, duplabels)
 
-\method{revealTruth}{default}(object, labels, duplabels)
+\method{revealTruth}{default}(object, truelabels, duplabels)
 
-\method{revealTruth}{list}(object, labels, duplabels)
+\method{revealTruth}{Duplicates}(object, truelabels, duplabels)
 }
 \arguments{
-\item{object}{\code{\link{Duplicates}} object to assess how the deduplication went.}
+\item{object}{object of class \code{\link{Duplicates}} to assess how the deduplication went.}
 
-\item{labels}{character or numeric vector containing the true match labels with 
+\item{truelabels}{character or numeric vector containing the true match labels with
 rows corresponding to the raw data matrix (in object[['rawData']])}
 
-\item{duplabels}{character vector containing the duplicated labels 
+\item{duplabels}{character vector containing the duplicated labels
 (i.e. object[['ID']] from previous steps)}
 }
 \value{

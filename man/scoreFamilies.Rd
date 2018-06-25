@@ -4,6 +4,7 @@
 \alias{scoreFamilies}
 \alias{scoreFamilies.default}
 \alias{scoreFamilies.Blocks}
+\alias{scoreFamilies.Scores}
 \title{Calculate match score generic.}
 \usage{
 scoreFamilies(object, familyDat, selfID, motherID, fatherID)
@@ -11,6 +12,8 @@ scoreFamilies(object, familyDat, selfID, motherID, fatherID)
 \method{scoreFamilies}{default}(object, familyDat, selfID, motherID, fatherID)
 
 \method{scoreFamilies}{Blocks}(object, familyDat, selfID, motherID, fatherID)
+
+\method{scoreFamilies}{Scores}(object, familyDat, selfID, motherID, fatherID)
 }
 \arguments{
 \item{object}{object containing pre-computed Neighbors from the BSN algorithm.}
