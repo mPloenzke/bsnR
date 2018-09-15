@@ -88,7 +88,7 @@ fathersfathers.neighbsObj <- Neighbors(fathersfathers, ID="requestId",keyVars=va
 ```
 
 ## Perform BSN
-We may now perform an iteration of the blocked sorted neighbors algorithm. The input must be a Neighbors object created in the previous step. The algorithm partitions the IDs based on the blocking variable provided and then repeats sorted neighbors iterations, each time collecting those neighbors within the specified sorted neighbors window. Please see __ for more information. This creates a Blocks object, which is essentially a Neighbors object which now contains information about the BSN call.
+We may now perform an iteration of the blocked sorted neighbors algorithm. The input must be a Neighbors object created in the previous step. The algorithm partitions the IDs based on the blocking variable provided and then repeats sorted neighbors iterations, each time collecting those neighbors within the specified sorted neighbors window. This creates a Blocks object, which is essentially a Neighbors object which now contains information about the BSN call.
 
 ```{r Blocks}
 # perform an iteration of BSN algorithm blocking on IP address
@@ -126,6 +126,7 @@ Background neighbors are potential duplicate pairs found by randomly choosing tw
 selfs.blocksObj <- sampleBackground(selfs.blocksObj, num=1)
 ```
 
+We may leverage the pedigree information by intersecting the found pairs across defined family member types (father, mother, etc.) and only retaining those pairs which were found a sufficient number of times (here we set the threshold to 2).
 
 ```{r}
 self.pairs <- cbind(selfs.blocksObj$Neighbors,member="self")
@@ -150,7 +151,7 @@ blocksObj$Neighbors <- as.matrix(unique.pairs)
 ```
 
 ## Scoring neighbors
-We now promote the Blocks object to a Scores object by scoring each pair of records. That is to say each pair of neighbors found previously are scored based on the key variables and their associated weights. The scoring is based on simple matching: string variables and binary variables are scored 0/1 for non-match/match and continuous (numeric) variables are scored based on a simple distance with an maximum value of 1 for match and 1/(abs(difference)+1) for non-matches.
+We now promote the Blocks object to a Scores object by scoring each pair of records. That is to say each pair of neighbors found previously are scored based on the key variables and their associated weights. The scoring is based on simple matching: string variables and binary variables are scored 0/1 for non-match/match and continuous (numeric) variables are scored based on a simple distance with an maximum value of 1 for match and 1/(abs(difference)+1) for non-matches. 
 
 ```{r Scores}
 # get match score (not incorporating pedigree structure)
@@ -177,7 +178,7 @@ plot(famscoresObj, type="density")
 ```
 
 ## Deduplication
-We are now ready to define a threshold and see how the BSN algorithm has performed. The threshold input is a proportion such that only those candidate duplicate pedigrees above the percentile are defined as true duplicate pairs. In the deDuplicate call below pedigrees will be assigned to duplicate entities; these entities are comprised of all families passing the threshold and completing the associative set (e.g. if family A and family B are candidate pairs passing the threshold, as are families A and C, then the duplicate entity consists of families A, B, C). The priority input defines how to sort these families within the entity. The function call returns a Duplicates object.
+We are now ready to define a threshold and see how the BSN algorithm has performed. The threshold input is a proportion such that only those candidate duplicate pedigrees above the percentile are defined as true duplicate pairs. In the deDuplicate call below pedigrees will be assigned to duplicate entities; these entities are comprised of all families passing the threshold and completing the associative set (e.g. if family A and family B are candidate pairs passing the threshold, as are families A and C, then the duplicate entity consists of families A, B, C). The priority input defines how to sort these families within the entity. The function call returns a Duplicates object. The above scoring procedures are useful when the variables exhibit sufficient variability; in our dataset, however, the pedigrees are relatively homogeneous and thus the scoring procedure does not provide significant gains. For this reason we set a very low threshold (0.01).
 
 ```{r Duplicates}
 # deduplicate on arbitrary threshold
