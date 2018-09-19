@@ -9,11 +9,14 @@
 \usage{
 scoreFamilies(object, familyDat, selfID, motherID, fatherID)
 
-\method{scoreFamilies}{default}(object, familyDat, selfID, motherID, fatherID)
+\method{scoreFamilies}{default}(object, familyDat, selfID, motherID,
+  fatherID)
 
-\method{scoreFamilies}{Blocks}(object, familyDat, selfID, motherID, fatherID)
+\method{scoreFamilies}{Blocks}(object, familyDat, selfID, motherID,
+  fatherID)
 
-\method{scoreFamilies}{Scores}(object, familyDat, selfID, motherID, fatherID)
+\method{scoreFamilies}{Scores}(object, familyDat, selfID, motherID,
+  fatherID)
 }
 \arguments{
 \item{object}{object containing pre-computed Neighbors from the BSN algorithm.}

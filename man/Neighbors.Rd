@@ -12,7 +12,7 @@ Neighbors(dat, ID, keyVars)
 \item{ID}{Character or numeric value. Identifing column in dat.
 This is the ID variable for which \code{Neighbors} will reference.}
 
-\item{keyVars}{Character or numeric vector. Which variables to 
+\item{keyVars}{Character or numeric vector. Which variables to
 include when generating sort keys?}
 }
 \value{

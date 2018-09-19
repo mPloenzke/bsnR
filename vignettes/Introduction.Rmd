@@ -13,14 +13,13 @@ This vignette is intended to showcase the typical workflow for creating and mani
 
 ## Dataset 
 
-The pedigrees datasets included in the package contains records for simulated family pedigrees. 
+The pedigrees dataset simulated above includes records for simulated family pedigrees. 
 
 ```{r dataset}
 rm(list=ls(all=TRUE))
 library(bsnR)
 library(tidyverse)
-data("pedigrees_ER25_N250")
-pedigrees <- pedigrees_ER25_N250
+data('pedigrees')
 self <- pedigrees %>%
   filter(ID==1)
 mothers <- pedigrees %>% 
@@ -213,7 +212,7 @@ selfs.deduped <- revealTruth(duplicatesObj, truelabels="FamilyID", duplabels="re
 
 ## Simulating new pedigrees
 
-You may also simulate your own duplicated pedigrees and repeat the procedure! See sample code below for formatting. The BayesMendel package is a dependency for this and you will need to source the script from the R folder.
+You may also simulate your own duplicated pedigrees. See sample code below for formatting. The BayesMendel package is a dependency for this and you will need to source the script from the R folder.
 
 ```{r, eval=FALSE}
 # create a simulation dataset with duplicates and miscodings
